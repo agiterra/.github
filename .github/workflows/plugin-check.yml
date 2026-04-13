@@ -28,7 +28,7 @@ jobs:
           # --- 1. Version match: package.json == plugin.json ---
           PKG_VERSION=$(jq -r '.version' package.json)
           if [ ! -f "$PLUGIN_JSON" ]; then
-            ERRORS+=("plugin.json not found at $PLUGIN_JSON")
+            echo "No plugin.json at $PLUGIN_JSON — skipping version match (library repo)"
           else
             PLUGIN_VERSION=$(jq -r '.version' "$PLUGIN_JSON")
             if [ "$PKG_VERSION" != "$PLUGIN_VERSION" ]; then
