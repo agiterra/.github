@@ -1,0 +1,105 @@
+name: Plugin Version Check
+
+on:
+  workflow_call:
+    inputs:
+      plugin-json-path:
+        description: "Path to plugin.json (default: .claude-plugin/plugin.json)"
+        required: false
+        type: string
+        default: ".claude-plugin/plugin.json"
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check version consistency and deps
+        run: |
+          set -euo pipefail
+
+          PLUGIN_JSON="${{ inputs.plugin-json-path }}"
+          ERRORS=()
+
+          # --- 1. Version match: package.json == plugin.json ---
+          PKG_VERSION=$(jq -r '.version' package.json)
+          if [ ! -f "$PLUGIN_JSON" ]; then
+            ERRORS+=("plugin.json not found at $PLUGIN_JSON")
+          else
+            PLUGIN_VERSION=$(jq -r '.version' "$PLUGIN_JSON")
+            if [ "$PKG_VERSION" != "$PLUGIN_VERSION" ]; then
+              ERRORS+=("Version mismatch: package.json=$PKG_VERSION, plugin.json=$PLUGIN_VERSION")
+            fi
+          fi
+
+          # --- 2. Valid semver bump from base branch ---
+          BASE_REF="${{ github.base_ref }}"
+          if [ -n "$BASE_REF" ]; then
+            # Fetch base branch package.json
+            BASE_VERSION=$(git show "origin/$BASE_REF:package.json" 2>/dev/null | jq -r '.version' 2>/dev/null || echo "")
+            if [ -n "$BASE_VERSION" ] && [ "$BASE_VERSION" != "null" ]; then
+              IFS='.' read -r BASE_MAJOR BASE_MINOR BASE_PATCH <<< "$BASE_VERSION"
+              IFS='.' read -r PR_MAJOR PR_MINOR PR_PATCH <<< "$PKG_VERSION"
+
+              VALID=false
+              # Major bump: major+1, minor=0, patch=0
+              if [ "$PR_MAJOR" -eq $((BASE_MAJOR + 1)) ] && [ "$PR_MINOR" -eq 0 ] && [ "$PR_PATCH" -eq 0 ]; then
+                VALID=true
+              # Minor bump: same major, minor+1, patch=0
+              elif [ "$PR_MAJOR" -eq "$BASE_MAJOR" ] && [ "$PR_MINOR" -eq $((BASE_MINOR + 1)) ] && [ "$PR_PATCH" -eq 0 ]; then
+                VALID=true
+              # Patch bump: same major+minor, patch+1
+              elif [ "$PR_MAJOR" -eq "$BASE_MAJOR" ] && [ "$PR_MINOR" -eq "$BASE_MINOR" ] && [ "$PR_PATCH" -eq $((BASE_PATCH + 1)) ]; then
+                VALID=true
+              fi
+
+              if [ "$VALID" = false ]; then
+                ERRORS+=("Invalid version bump: $BASE_VERSION -> $PKG_VERSION (must increment exactly one semver segment by 1)")
+              else
+                echo "Valid semver bump: $BASE_VERSION -> $PKG_VERSION"
+              fi
+            else
+              echo "Could not read base branch version, skipping bump check"
+            fi
+          fi
+
+          # --- 3. No file: deps ---
+          FILE_DEPS=$(jq -r '.dependencies // {} | to_entries[] | select(.value | startswith("file:")) | "\(.key): \(.value)"' package.json)
+          if [ -n "$FILE_DEPS" ]; then
+            ERRORS+=("Local file: dependencies found (not publishable):")
+            while IFS= read -r line; do
+              ERRORS+=("  $line")
+            done <<< "$FILE_DEPS"
+          fi
+
+          # --- 4. No branch deps (only on PRs to main) ---
+          if [ "$BASE_REF" = "main" ] || [ "$BASE_REF" = "master" ]; then
+            BRANCH_DEPS=$(jq -r '
+              .dependencies // {} | to_entries[] |
+              select(.value | test("#[^v]|#[a-zA-Z]")) |
+              select(.value | test("#v[0-9]") | not) |
+              "\(.key): \(.value)"
+            ' package.json)
+            if [ -n "$BRANCH_DEPS" ]; then
+              ERRORS+=("Branch ref dependencies found (must use version tags for PRs to $BASE_REF):")
+              while IFS= read -r line; do
+                ERRORS+=("  $line")
+              done <<< "$BRANCH_DEPS"
+            fi
+          fi
+
+          # --- Report ---
+          if [ ${#ERRORS[@]} -gt 0 ]; then
+            echo ""
+            echo "::error::Plugin version check failed:"
+            for err in "${ERRORS[@]}"; do
+              echo "  $err"
+            done
+            exit 1
+          fi
+
+          echo "All checks passed: version=$PKG_VERSION"
