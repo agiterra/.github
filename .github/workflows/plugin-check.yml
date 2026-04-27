@@ -10,7 +10,7 @@ on:
         default: ".claude-plugin/plugin.json"
 
 jobs:
-  check-versions:
+  plugin-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR branch
