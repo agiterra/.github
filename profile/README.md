@@ -1,8 +1,12 @@
 # Agiterra
 
-**An open ecosystem for running AI engineering teams.**
+Agiterra LLC builds developer tools and SaaS products. This GitHub org hosts our public, open-source work — primarily the **Agiterra Toolkit**.
 
-Agiterra is a collection of small, AI-vendor-agnostic tools that turn one or many AI coding agents into a coordinated team. Use one tool, use them all — they compose, they don't lock you in.
+## Agiterra Toolkit
+
+**An open framework for running AI engineering teams.**
+
+The Agiterra Toolkit is a collection of small, AI-vendor-agnostic tools that turn one or many AI coding agents into a coordinated team. Use one tool, use them all — they compose, they don't lock you in.
 
 Built around three primitives:
 
@@ -18,13 +22,13 @@ Around those primitives, smaller plugins fill in the rest: a remote-aware dashbo
 - **Builders** experimenting with multi-agent systems
 - **Teams** who want their agents to communicate, remember, and recover
 
-Whether you have one agent or twenty, Agiterra meets you where you are.
+Whether you have one agent or twenty, the Toolkit meets you where you are.
 
 ## Where to start
 
 | You want to… | Go here |
 |---|---|
-| Understand what Agiterra IS and how to use it | [agiterra/handbook](https://github.com/agiterra/handbook) |
+| Understand what the Toolkit IS and how to use it | [agiterra/handbook](https://github.com/agiterra/handbook) |
 | Install on Claude Code | [agiterra/claude-marketplace](https://github.com/agiterra/claude-marketplace) |
 | Install on Codex (or another runtime) | [handbook/SETUP-CODEX.md](https://github.com/agiterra/handbook/blob/main/SETUP-CODEX.md) |
 | Browse the plugins | See the repo list below |
