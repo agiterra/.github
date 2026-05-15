@@ -1,12 +1,12 @@
 # Agiterra
 
-Agiterra LLC builds developer tools and SaaS products. This GitHub org hosts our public, open-source work — primarily the **Agiterra Toolkit**.
+Agiterra LLC builds developer tools and SaaS products. This GitHub org hosts our public, open-source work — primarily the **Agiterra Multi-Agent Toolkit**.
 
-## Agiterra Toolkit
+## Agiterra Multi-Agent Toolkit
 
 **An open framework for running AI engineering teams.**
 
-The Agiterra Toolkit is a collection of small, AI-vendor-agnostic tools that turn one or many AI coding agents into a coordinated team. Use one tool, use them all — they compose, they don't lock you in.
+The Agiterra Multi-Agent Toolkit is a collection of small, AI-vendor-agnostic tools that turn one or many AI coding agents into a coordinated team. Use one tool, use them all — they compose, they don't lock you in.
 
 Built around three primitives:
 
