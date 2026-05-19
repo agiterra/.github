@@ -14,7 +14,9 @@ Built around three primitives:
 - **Crew** — launch and manage agents in persistent terminal sessions. They keep working even when you close your laptop lid.
 - **Knowledge** — a personal vault for each agent. Their identity, their learnings, their journal. Survives compaction and restarts.
 
-Around those primitives, smaller plugins fill in the rest: a remote-aware dashboard, agentic GitHub PR review, scheduled prompts, persistent crypto wallets, cross-machine SSH fan-out, themeable terminal layouts.
+And **Bridge** sits on top: the orchestrator's plugin. Collapses the multi-step orchestrator dances (register identity → assemble env → launch agent → place pane → attach → kick off task) into single composite MCP calls. Stays domain-naive itself — capability-specific behavior (GitHub, Linear, etc.) ships as separate `bridge-X` integration plugins that anyone can write.
+
+Around those four, smaller plugins fill in the rest: a remote-aware dashboard, agentic GitHub PR review, scheduled prompts, persistent crypto wallets, cross-machine SSH fan-out, themeable terminal layouts.
 
 ## Who is this for?
 
@@ -37,6 +39,7 @@ Whether you have one agent or twenty, the Toolkit meets you where you are.
 
 | Plugin | What it does |
 |---|---|
+| [bridge-claude-code](https://github.com/agiterra/bridge-claude-code) | **Orchestrator's plugin** — collapses the multi-step spawn dance (wire register → env-map → crew launch → pane create → attach → IPC kickoff) into one MCP call. Pairs with `bridge-X` integration plugins. |
 | [wire-claude-code](https://github.com/agiterra/wire-claude-code) / [wire-codex](https://github.com/agiterra/wire-codex) | Wire client — SSE inbound, agent registration, heartbeats |
 | [wire-ipc-claude-code](https://github.com/agiterra/wire-ipc-claude-code) / [wire-ipc-codex](https://github.com/agiterra/wire-ipc-codex) | Ed25519-signed messaging between agents |
 | [crew-claude-code](https://github.com/agiterra/crew-claude-code) | Launch + manage agents in screen sessions |
