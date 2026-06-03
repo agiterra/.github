@@ -45,7 +45,7 @@ Whether you have one agent or twenty, the Toolkit meets you where you are.
 | [crew-claude-code](https://github.com/agiterra/crew-claude-code) | Launch + manage agents in screen sessions |
 | [knowledge-claude-code](https://github.com/agiterra/knowledge-claude-code) | Persistent vault — identity, journal, search, compaction recovery |
 | [knowledge-indexer-claude-code](https://github.com/agiterra/knowledge-indexer-claude-code) | Auto-indexes vault writes (semantic + keyword search) |
-| [operator-relay-claude-code](https://github.com/agiterra/operator-relay-claude-code) | Forward your prompts to ephemeral agents back to their manager |
+| [operator-relay-claude-code](https://github.com/agiterra/operator-relay-claude-code) | **Worker-side plugin.** Runs on ephemeral workers: relays prompts typed directly into a worker's session up to its manager — so the orchestrator sees out-of-band operator input. Not an orchestrator plugin. |
 | [crew-themes](https://github.com/agiterra/crew-themes) | Pane backgrounds + themed layouts |
 | [crew-fleet-claude-code](https://github.com/agiterra/crew-fleet-claude-code) | SSH-based cross-machine crew |
 | [wallet-claude-code](https://github.com/agiterra/wallet-claude-code) | Agent crypto wallets — sign decisions, manage vaults |
