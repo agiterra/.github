@@ -39,7 +39,7 @@ Whether you have one agent or twenty, the Toolkit meets you where you are.
 
 | Plugin | What it does |
 |---|---|
-| [bridge-claude-code](https://github.com/agiterra/bridge-claude-code) | **Orchestrator's plugin** — collapses the multi-step spawn dance (wire register → env-map → crew launch → pane create → attach → IPC kickoff) into one MCP call. Pairs with `bridge-X` integration plugins. |
+| [bridge-claude-code](https://github.com/agiterra/bridge-claude-code) | **Orchestrator's plugin** — collapses the multi-step orchestration dances (register → env-map → launch → pane → attach → IPC kickoff) into single composite MCP calls (`spawn`, `handoff`, `close`, `compose-brief`, `health`, …). Domain-naive: spawns at the `project_dir` you give it and forwards env, nothing more; capability-specific behavior ships as `bridge-X` plugins. |
 | [wire-claude-code](https://github.com/agiterra/wire-claude-code) / [wire-codex](https://github.com/agiterra/wire-codex) | Wire client — SSE inbound, agent registration, heartbeats |
 | [wire-ipc-claude-code](https://github.com/agiterra/wire-ipc-claude-code) / [wire-ipc-codex](https://github.com/agiterra/wire-ipc-codex) | Ed25519-signed messaging between agents |
 | [crew-claude-code](https://github.com/agiterra/crew-claude-code) | Launch + manage agents in screen sessions |
